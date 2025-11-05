@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Dashboard - ProManage</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-project-diagram me-2"></i>ProManage
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <span class="text-muted">
+          <i class="fas fa-shield-alt me-1"></i>Admin Dashboard
+        </span>
+        <button class="theme-toggle-sm btn btn-outline-secondary btn-sm" id="themeToggle" title="Toggle Theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card bg-gradient text-white animate-fade-in">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8 animate-fade-in-left">
+                <h2 class="mb-2" id="welcomeMessage">Admin Control Panel</h2>
+                <p class="mb-0 opacity-75">Manage users, projects, and system-wide settings</p>
+              </div>
+              <div class="col-md-4 text-end animate-fade-in-right">
+                <i class="fas fa-shield-alt fa-3x opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-number" id="totalUsers">0</div>
+            <div class="stat-label">
+              <i class="fas fa-users me-1"></i>Total Users
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-primary);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="totalProjects">0</div>
+            <div class="stat-label">
+              <i class="fas fa-project-diagram me-1"></i>Active Projects
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-success);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="totalTasks">0</div>
+            <div class="stat-label">
+              <i class="fas fa-tasks me-1"></i>Total Tasks
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-warm);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="openBugs">0</div>
+            <div class="stat-label">
+              <i class="fas fa-bug me-1"></i>Open Bugs
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Users Management -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-users me-2"></i>Users Management
+              <span class="badge bg-primary ms-2" id="userCount">0</span>
+            </h5>
+            <a href="analytics.html" class="btn btn-outline-info btn-sm">
+              <i class="fas fa-chart-line me-1"></i>Analytics
+            </a>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable">
+                  <!-- Users will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects Overview -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-project-diagram me-2"></i>Projects Overview
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush" id="projectsList">
+              <!-- Projects will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Members by Role -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-users-cog me-2"></i>Team Members by Role
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <h4 id="pmCount">0</h4>
+                    <p class="mb-0">Project Managers</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h4 id="devCount">0</h4>
+                    <p class="mb-0">Developers</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="card bg-info text-white">
+                  <div class="card-body text-center">
+                    <h4 id="progCount">0</h4>
+                    <p class="mb-0">Programmers</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h4 id="testCount">0</h4>
+                    <p class="mb-0">Testers</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-clock me-2"></i>Recent System Activity
+            </h5>
+          </div>
+          <div class="card-body">
+            <div id="activityList" class="list-group list-group-flush">
+              <!-- Activity will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="notifications.js"></script>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const THEME_KEY = 'promanage_theme';
+    
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem(THEME_KEY, newTheme);
+    });
+
+    ensureRole('admin');
+    const currentUser = getCurrentUser();
+
+    function updateStats() {
+      const users = getAllTeamMembers();
+      const projects = getAllProjects();
+      const tasks = getAllTasks();
+      const bugs = getAllBugs().filter(b => b.status === 'open');
+
+      document.getElementById('totalUsers').textContent = users.length;
+      document.getElementById('totalProjects').textContent = projects.filter(p => p.status === 'active').length;
+      document.getElementById('totalTasks').textContent = tasks.length;
+      document.getElementById('openBugs').textContent = bugs.length;
+      document.getElementById('userCount').textContent = users.length;
+
+      // Role counts
+      document.getElementById('pmCount').textContent = users.filter(u => u.role === 'project_manager').length;
+      document.getElementById('devCount').textContent = users.filter(u => u.role === 'developer').length;
+      document.getElementById('progCount').textContent = users.filter(u => u.role === 'programmer').length;
+      document.getElementById('testCount').textContent = users.filter(u => u.role === 'tester').length;
+    }
+
+    function renderUsers() {
+      const users = getAllTeamMembers();
+      const container = document.getElementById('usersTable');
+      
+      container.innerHTML = users.map(u => `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="avatar-circle me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                ${u.name.charAt(0)}
+              </div>
+              <div>
+                <div class="fw-semibold">${u.name}</div>
+                <small class="text-muted">${u.email}</small>
+              </div>
+            </div>
+          </td>
+          <td>${u.email}</td>
+          <td>
+            <span class="badge bg-${getRoleColor(u.role)}">${u.role.replace('_', ' ')}</span>
+          </td>
+          <td>${u.department || 'N/A'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getRoleColor(role) {
+      const colors = {
+        'admin': 'danger',
+        'project_manager': 'primary',
+        'developer': 'success',
+        'programmer': 'info',
+        'tester': 'warning'
+      };
+      return colors[role] || 'secondary';
+    }
+
+    function renderProjects() {
+      const projects = getAllProjects().slice(0, 5);
+      const container = document.getElementById('projectsList');
+      
+      if (projects.length === 0) {
+        container.innerHTML = '<div class="list-group-item text-center py-4 text-muted">No projects found</div>';
+        return;
+      }
+
+      container.innerHTML = projects.map(p => {
+        const pm = getTeamMemberById(p.project_manager_id);
+        const statusColor = p.status === 'active' ? 'success' : p.status === 'completed' ? 'primary' : 'secondary';
+        return `
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="mb-1">${p.name}</h6>
+                <p class="text-muted small mb-2">${p.description}</p>
+                <small class="text-muted">
+                  <i class="fas fa-user-tie me-1"></i>${pm?.name || 'Unassigned'} • 
+                  <span class="badge bg-${statusColor}">${p.status}</span>
+                </small>
+              </div>
+              <div class="text-end">
+                <div class="mb-2">
+                  <small class="text-muted">Progress</small>
+                  <div class="progress" style="width: 100px; height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: ${p.progress}%">${p.progress}%</div>
+                  </div>
+                </div>
+                <small class="text-muted">${p.team_ids.length} members</small>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderActivity() {
+      const container = document.getElementById('activityList');
+      const projects = getAllProjects().slice(0, 5);
+      const tasks = getAllTasks().slice(0, 3);
+      
+      const activities = [
+        ...projects.map(p => ({
+          type: 'project',
+          message: `Project "${p.name}" is ${p.status}`,
+          date: p.start_date,
+          icon: 'fa-project-diagram',
+          color: 'primary'
+        })),
+        ...tasks.map(t => ({
+          type: 'task',
+          message: `Task "${t.title}" created`,
+          date: t.created_date,
+          icon: 'fa-tasks',
+          color: 'success'
+        }))
+      ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+
+      if (activities.length === 0) {
+        container.innerHTML = '<div class="list-group-item text-center py-4 text-muted">No recent activity</div>';
+        return;
+      }
+
+      container.innerHTML = activities.map(act => `
+        <div class="list-group-item">
+          <div class="d-flex align-items-center">
+            <i class="fas ${act.icon} text-${act.color} me-3"></i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">${act.message}</div>
+              <small class="text-muted">${new Date(act.date).toLocaleDateString()}</small>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    updateStats();
+    renderUsers();
+    renderProjects();
+    renderActivity();
+  </script>
+</body>
+</html>
+

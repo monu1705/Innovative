@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Developer Dashboard - ProManage</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-project-diagram me-2"></i>ProManage
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <span class="text-muted">
+          <i class="fas fa-code me-1"></i>Developer Dashboard
+        </span>
+        <button class="theme-toggle-sm btn btn-outline-secondary btn-sm" id="themeToggle" title="Toggle Theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <a href="projects.html" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-folder me-1"></i>All Projects
+        </a>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card bg-gradient text-white animate-fade-in">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8 animate-fade-in-left">
+                <h2 class="mb-2" id="welcomeMessage">Developer Dashboard</h2>
+                <p class="mb-0 opacity-75">View your assigned tasks, log time, and track your progress</p>
+              </div>
+              <div class="col-md-4 text-end animate-fade-in-right">
+                <i class="fas fa-code fa-3x opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-number" id="myTasks">0</div>
+            <div class="stat-label">
+              <i class="fas fa-tasks me-1"></i>My Tasks
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-success);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="completed">0</div>
+            <div class="stat-label">
+              <i class="fas fa-check-circle me-1"></i>Completed
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-primary);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="inProgress">0</div>
+            <div class="stat-label">
+              <i class="fas fa-spinner me-1"></i>In Progress
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-warm);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="hoursLogged">0</div>
+            <div class="stat-label">
+              <i class="fas fa-clock me-1"></i>Hours Logged
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- My Tasks -->
+      <div class="col-lg-8 mb-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-tasks me-2"></i>My Tasks
+            </h5>
+            <div class="btn-group" role="group">
+              <button class="btn btn-outline-primary btn-sm active" onclick="filterTasks('all')">All</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="filterTasks('todo')">Todo</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="filterTasks('in_progress')">In Progress</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="filterTasks('testing')">Testing</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="filterTasks('completed')">Completed</button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div id="tasksList" class="list-group list-group-flush">
+              <!-- Tasks will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Logging -->
+      <div class="col-lg-4 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-clock me-2"></i>Log Time
+            </h5>
+          </div>
+          <div class="card-body">
+            <form id="timeLogForm">
+              <div class="mb-3">
+                <label class="form-label">Task</label>
+                <select class="form-select" id="timeLogTask" required>
+                  <option value="">Select a task...</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" id="timeLogDate" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Hours</label>
+                <input type="number" class="form-control" id="timeLogHours" min="0.5" step="0.5" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" id="timeLogDescription" rows="3" placeholder="What did you work on?"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-save me-2"></i>Log Time
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- My Projects -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-project-diagram me-2"></i>My Projects
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div id="myProjectsList" class="list-group list-group-flush">
+              <!-- Projects will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="notifications.js"></script>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const THEME_KEY = 'promanage_theme';
+    
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem(THEME_KEY, newTheme);
+    });
+
+    const currentUser = getCurrentUser();
+    if (!currentUser || (currentUser.role !== 'developer' && currentUser.role !== 'programmer')) {
+      alert('Not logged in as developer or programmer. Redirecting to login.');
+      location.href = 'login.html';
+    }
+    
+    const memberId = getCurrentUserMemberId();
+    let currentFilter = 'all';
+
+    function updateStats() {
+      const myTasks = getTasksByAssignee(memberId);
+      const completed = myTasks.filter(t => t.status === 'completed').length;
+      const inProgress = myTasks.filter(t => t.status === 'in_progress').length;
+      const timeLogs = getAllTimeLogs().filter(tl => tl.member_id === memberId);
+      const totalHours = timeLogs.reduce((sum, tl) => sum + tl.hours, 0);
+
+      document.getElementById('myTasks').textContent = myTasks.length;
+      document.getElementById('completed').textContent = completed;
+      document.getElementById('inProgress').textContent = inProgress;
+      document.getElementById('hoursLogged').textContent = totalHours;
+    }
+
+    function renderTasks(filter = 'all') {
+      let tasks = getTasksByAssignee(memberId);
+      
+      if (filter !== 'all') {
+        tasks = tasks.filter(t => t.status === filter);
+      }
+
+      tasks.sort((a, b) => {
+        const priorityOrder = { 'critical': 4, 'high': 3, 'medium': 2, 'low': 1 };
+        return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+      });
+
+      const container = document.getElementById('tasksList');
+      
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div class="list-group-item text-center py-5">
+            <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No tasks found</h5>
+            <p class="text-muted">You don't have any ${filter === 'all' ? '' : filter + ' '}tasks assigned.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = tasks.map(t => {
+        const project = getProjectById(t.project_id);
+        const statusColors = {
+          'completed': 'success',
+          'in_progress': 'primary',
+          'testing': 'warning',
+          'todo': 'secondary'
+        };
+        const priorityColors = {
+          'critical': 'danger',
+          'high': 'warning',
+          'medium': 'info',
+          'low': 'secondary'
+        };
+        const progress = t.estimated_hours > 0 ? Math.round((t.actual_hours / t.estimated_hours) * 100) : 0;
+        
+        return `
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">
+                  ${t.title}
+                  <span class="badge bg-${statusColors[t.status] || 'secondary'} ms-2">${t.status}</span>
+                  <span class="badge bg-${priorityColors[t.priority] || 'secondary'} ms-1">${t.priority}</span>
+                </h6>
+                <p class="text-muted small mb-2">${t.description}</p>
+                <div class="d-flex gap-3 mb-2">
+                  <small class="text-muted">
+                    <i class="fas fa-project-diagram me-1"></i>${project?.name || 'Unknown Project'}
+                  </small>
+                  <small class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>Due: ${new Date(t.due_date).toLocaleDateString()}
+                  </small>
+                  <small class="text-muted">
+                    <i class="fas fa-clock me-1"></i>${t.actual_hours || 0}/${t.estimated_hours || 0}h
+                  </small>
+                </div>
+                ${t.estimated_hours > 0 ? `
+                  <div class="progress mb-2" style="height: 6px;">
+                    <div class="progress-bar ${progress > 100 ? 'bg-danger' : 'bg-success'}" role="progressbar" style="width: ${Math.min(progress, 100)}%"></div>
+                  </div>
+                ` : ''}
+                ${t.labels && t.labels.length > 0 ? `
+                  <div class="d-flex gap-1">
+                    ${t.labels.map(label => `<span class="badge bg-light text-dark">${label}</span>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="ms-3">
+                ${t.status === 'todo' ? `
+                  <button class="btn btn-sm btn-primary" onclick="updateTaskStatus('${t.id}', 'in_progress')">
+                    <i class="fas fa-play me-1"></i>Start
+                  </button>
+                ` : t.status === 'in_progress' ? `
+                  <button class="btn btn-sm btn-success" onclick="updateTaskStatus('${t.id}', 'testing')">
+                    <i class="fas fa-check me-1"></i>Complete
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterTasks(status) {
+      currentFilter = status;
+      renderTasks(status);
+      
+      // Update button states
+      document.querySelectorAll('.btn-group button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    window.filterTasks = filterTasks;
+
+    function updateTaskStatus(taskId, status) {
+      updateTaskStatus(taskId, status);
+      updateStats();
+      renderTasks(currentFilter);
+      
+      const task = getTaskById(taskId);
+      const project = getProjectById(task.project_id);
+      updateProjectProgress(project.id);
+      
+      alert(`Task status updated to ${status}`);
+    }
+
+    window.updateTaskStatus = updateTaskStatus;
+
+    function renderTimeLogForm() {
+      const myTasks = getTasksByAssignee(memberId).filter(t => t.status !== 'completed');
+      const select = document.getElementById('timeLogTask');
+      
+      select.innerHTML = '<option value="">Select a task...</option>' +
+        myTasks.map(t => `<option value="${t.id}">${t.title} - ${getProjectById(t.project_id)?.name || 'Unknown'}</option>`).join('');
+      
+      // Set today's date as default
+      document.getElementById('timeLogDate').valueAsDate = new Date();
+    }
+
+    function renderMyProjects() {
+      const myTasks = getTasksByAssignee(memberId);
+      const projectIds = [...new Set(myTasks.map(t => t.project_id))];
+      const projects = projectIds.map(id => getProjectById(id)).filter(Boolean);
+      
+      const container = document.getElementById('myProjectsList');
+      
+      if (projects.length === 0) {
+        container.innerHTML = '<div class="list-group-item text-center py-4 text-muted">No projects</div>';
+        return;
+      }
+
+      container.innerHTML = projects.map(p => {
+        const projectTasks = myTasks.filter(t => t.project_id === p.id);
+        const completedTasks = projectTasks.filter(t => t.status === 'completed').length;
+        const progress = projectTasks.length > 0 ? Math.round((completedTasks / projectTasks.length) * 100) : 0;
+        
+        return `
+          <div class="list-group-item">
+            <h6 class="mb-1">${p.name}</h6>
+            <small class="text-muted">${projectTasks.length} tasks</small>
+            <div class="progress mt-2" style="height: 4px;">
+              <div class="progress-bar" role="progressbar" style="width: ${progress}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('timeLogForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const taskId = document.getElementById('timeLogTask').value;
+      const date = document.getElementById('timeLogDate').value;
+      const hours = parseFloat(document.getElementById('timeLogHours').value);
+      const description = document.getElementById('timeLogDescription').value;
+      
+      const task = getTaskById(taskId);
+      if (!task) {
+        alert('Please select a valid task');
+        return;
+      }
+
+      logTime(taskId, memberId, task.project_id, date, hours, description);
+      
+      document.getElementById('timeLogForm').reset();
+      document.getElementById('timeLogDate').valueAsDate = new Date();
+      
+      updateStats();
+      renderTasks(currentFilter);
+      renderTimeLogForm();
+      
+      alert('Time logged successfully!');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // Set welcome message
+    const member = getTeamMemberById(memberId);
+    if (member) {
+      document.getElementById('welcomeMessage').textContent = `Welcome, ${member.name.split(' ')[0]}!`;
+    }
+
+    updateStats();
+    renderTasks();
+    renderTimeLogForm();
+    renderMyProjects();
+  </script>
+</body>
+</html>
+

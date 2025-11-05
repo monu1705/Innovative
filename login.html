@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ProManage - Intelligent Project Management</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </div>
+
+  <div class="login-container">
+    <div class="login-wrapper">
+      <!-- Main Login Card -->
+      <div class="login-card">
+        <div class="login-header">
+          <div class="login-logo">
+            <i class="fas fa-project-diagram"></i>
+          </div>
+          <h1 class="login-title">ProManage</h1>
+          <p class="login-subtitle">Intelligent Software Project Management</p>
+        </div>
+
+        <form id="loginForm">
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="fas fa-envelope me-2"></i>Email Address
+            </label>
+            <input id="email" class="form-control form-control-lg" type="email" placeholder="Enter your email" required autocomplete="email">
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="fas fa-lock me-2"></i>Password
+            </label>
+            <input id="password" class="form-control form-control-lg" type="password" placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="fas fa-user-tag me-2"></i>Role
+            </label>
+            <select id="role" class="form-select form-select-lg" required>
+              <option value="">Select your role</option>
+              <option value="admin">Administrator</option>
+              <option value="project_manager">Project Manager</option>
+              <option value="developer">Developer</option>
+              <option value="programmer">Programmer</option>
+              <option value="tester">Tester</option>
+            </select>
+          </div>
+          
+          <div class="d-grid mb-4">
+            <button class="btn btn-primary btn-lg" type="submit">
+              <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mb-4">
+          <hr class="my-4">
+          <p class="text-muted small mb-3">Quick Demo Access</p>
+          <button class="btn btn-outline-primary btn-sm" id="demoToggleBtn">
+            <i class="fas fa-users me-2"></i>
+            <span id="demoToggleText">Show Demo Accounts</span>
+            <i class="fas fa-chevron-down ms-2" id="demoToggleIcon"></i>
+          </button>
+        </div>
+
+        <!-- Demo Users Section -->
+        <div id="demoUsers" style="display: none;">
+          <!-- Admin -->
+          <div class="demo-category" data-category="admin">
+            <div class="demo-category-header" onclick="toggleDemoCategory('admin')">
+              <h6 class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>Administrators
+              </h6>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">2</span>
+                <i class="fas fa-chevron-down demo-category-toggle"></i>
+              </div>
+            </div>
+            <div class="demo-category-content">
+              <div class="demo-users-grid">
+                <div class="demo-user-card" onclick="fillDemoLogin('admin@promanage.com')">
+                  <div class="demo-user-avatar">A</div>
+                  <div class="demo-user-name">System Admin</div>
+                  <div class="demo-user-role">Administrator</div>
+                  <div class="demo-user-email">admin@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('admin2@promanage.com')">
+                  <div class="demo-user-avatar">A</div>
+                  <div class="demo-user-name">Admin User</div>
+                  <div class="demo-user-role">Administrator</div>
+                  <div class="demo-user-email">admin2@promanage.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Managers -->
+          <div class="demo-category" data-category="project-managers">
+            <div class="demo-category-header" onclick="toggleDemoCategory('project-managers')">
+              <h6 class="mb-0">
+                <i class="fas fa-tasks me-2"></i>Project Managers
+              </h6>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">3</span>
+                <i class="fas fa-chevron-down demo-category-toggle"></i>
+              </div>
+            </div>
+            <div class="demo-category-content">
+              <div class="demo-users-grid">
+                <div class="demo-user-card" onclick="fillDemoLogin('pm@promanage.com')">
+                  <div class="demo-user-avatar">S</div>
+                  <div class="demo-user-name">Sarah Johnson</div>
+                  <div class="demo-user-role">Project Manager</div>
+                  <div class="demo-user-email">pm@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('pm2@promanage.com')">
+                  <div class="demo-user-avatar">M</div>
+                  <div class="demo-user-name">Michael Chen</div>
+                  <div class="demo-user-role">Project Manager</div>
+                  <div class="demo-user-email">pm2@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('pm3@promanage.com')">
+                  <div class="demo-user-avatar">E</div>
+                  <div class="demo-user-name">Emily Davis</div>
+                  <div class="demo-user-role">Project Manager</div>
+                  <div class="demo-user-email">pm3@promanage.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Developers -->
+          <div class="demo-category" data-category="developers">
+            <div class="demo-category-header" onclick="toggleDemoCategory('developers')">
+              <h6 class="mb-0">
+                <i class="fas fa-code me-2"></i>Developers
+              </h6>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">8</span>
+                <i class="fas fa-chevron-down demo-category-toggle"></i>
+              </div>
+            </div>
+            <div class="demo-category-content">
+              <div class="demo-users-grid">
+                <div class="demo-user-card" onclick="fillDemoLogin('dev@promanage.com')">
+                  <div class="demo-user-avatar">A</div>
+                  <div class="demo-user-name">Alex Rodriguez</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev2@promanage.com')">
+                  <div class="demo-user-avatar">D</div>
+                  <div class="demo-user-name">David Kim</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev2@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev3@promanage.com')">
+                  <div class="demo-user-avatar">J</div>
+                  <div class="demo-user-name">Jessica Martinez</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev3@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev4@promanage.com')">
+                  <div class="demo-user-avatar">R</div>
+                  <div class="demo-user-name">Ryan Thompson</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev4@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev5@promanage.com')">
+                  <div class="demo-user-avatar">L</div>
+                  <div class="demo-user-name">Lisa Anderson</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev5@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev6@promanage.com')">
+                  <div class="demo-user-avatar">J</div>
+                  <div class="demo-user-name">James Wilson</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev6@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev7@promanage.com')">
+                  <div class="demo-user-avatar">S</div>
+                  <div class="demo-user-name">Sophia Brown</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev7@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('dev8@promanage.com')">
+                  <div class="demo-user-avatar">D</div>
+                  <div class="demo-user-name">Daniel Lee</div>
+                  <div class="demo-user-role">Developer</div>
+                  <div class="demo-user-email">dev8@promanage.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Programmers -->
+          <div class="demo-category" data-category="programmers">
+            <div class="demo-category-header" onclick="toggleDemoCategory('programmers')">
+              <h6 class="mb-0">
+                <i class="fas fa-keyboard me-2"></i>Programmers
+              </h6>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">5</span>
+                <i class="fas fa-chevron-down demo-category-toggle"></i>
+              </div>
+            </div>
+            <div class="demo-category-content">
+              <div class="demo-users-grid">
+                <div class="demo-user-card" onclick="fillDemoLogin('prog@promanage.com')">
+                  <div class="demo-user-avatar">C</div>
+                  <div class="demo-user-name">Chris Taylor</div>
+                  <div class="demo-user-role">Programmer</div>
+                  <div class="demo-user-email">prog@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('prog2@promanage.com')">
+                  <div class="demo-user-avatar">A</div>
+                  <div class="demo-user-name">Amanda White</div>
+                  <div class="demo-user-role">Programmer</div>
+                  <div class="demo-user-email">prog2@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('prog3@promanage.com')">
+                  <div class="demo-user-avatar">K</div>
+                  <div class="demo-user-name">Kevin Garcia</div>
+                  <div class="demo-user-role">Programmer</div>
+                  <div class="demo-user-email">prog3@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('prog4@promanage.com')">
+                  <div class="demo-user-avatar">N</div>
+                  <div class="demo-user-name">Nicole Harris</div>
+                  <div class="demo-user-role">Programmer</div>
+                  <div class="demo-user-email">prog4@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('prog5@promanage.com')">
+                  <div class="demo-user-avatar">B</div>
+                  <div class="demo-user-name">Brian Clark</div>
+                  <div class="demo-user-role">Programmer</div>
+                  <div class="demo-user-email">prog5@promanage.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testers -->
+          <div class="demo-category" data-category="testers">
+            <div class="demo-category-header" onclick="toggleDemoCategory('testers')">
+              <h6 class="mb-0">
+                <i class="fas fa-vial me-2"></i>Testers
+              </h6>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">5</span>
+                <i class="fas fa-chevron-down demo-category-toggle"></i>
+              </div>
+            </div>
+            <div class="demo-category-content">
+              <div class="demo-users-grid">
+                <div class="demo-user-card" onclick="fillDemoLogin('tester@promanage.com')">
+                  <div class="demo-user-avatar">M</div>
+                  <div class="demo-user-name">Maria Lopez</div>
+                  <div class="demo-user-role">Tester</div>
+                  <div class="demo-user-email">tester@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('tester2@promanage.com')">
+                  <div class="demo-user-avatar">R</div>
+                  <div class="demo-user-name">Robert Smith</div>
+                  <div class="demo-user-role">Tester</div>
+                  <div class="demo-user-email">tester2@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('tester3@promanage.com')">
+                  <div class="demo-user-avatar">J</div>
+                  <div class="demo-user-name">Jennifer Adams</div>
+                  <div class="demo-user-role">Tester</div>
+                  <div class="demo-user-email">tester3@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('tester4@promanage.com')">
+                  <div class="demo-user-avatar">T</div>
+                  <div class="demo-user-name">Thomas Wright</div>
+                  <div class="demo-user-role">Tester</div>
+                  <div class="demo-user-email">tester4@promanage.com</div>
+                </div>
+                <div class="demo-user-card" onclick="fillDemoLogin('tester5@promanage.com')">
+                  <div class="demo-user-avatar">P</div>
+                  <div class="demo-user-name">Patricia Moore</div>
+                  <div class="demo-user-role">Tester</div>
+                  <div class="demo-user-email">tester5@promanage.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reset Data -->
+        <div class="text-center mt-4">
+          <div class="btn-group" role="group">
+            <button class="btn btn-outline-warning btn-sm" onclick="resetDemoData()">
+              <i class="fas fa-redo me-1"></i>Reset Data
+            </button>
+            <button class="btn btn-outline-danger btn-sm" onclick="resetAllData()">
+              <i class="fas fa-trash me-1"></i>Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="notifications.js"></script>
+  <script>
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const THEME_KEY = 'promanage_theme';
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem(THEME_KEY, newTheme);
+    });
+
+    // Login Form Handler
+    const roleSelect = document.getElementById('role');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+
+    const roleRoutes = {
+      'admin': 'admin.html',
+      'project_manager': 'pm.html',
+      'developer': 'dev.html',
+      'programmer': 'dev.html',
+      'tester': 'tester.html'
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const emailValue = email.value.trim();
+      const passwordValue = password.value.trim();
+      const role = roleSelect.value;
+      
+      if (!role) {
+        alert('Please select a role');
+        return;
+      }
+      
+      const ok = demoLogin(emailValue, passwordValue, role);
+      if (ok) {
+        const route = roleRoutes[role] || 'dev.html';
+        location.href = route;
+      } else {
+        alert('Invalid credentials. Please use demo accounts from the list below.');
+      }
+    });
+
+    // Demo Login Function - Auto-fills and logs in
+    function fillDemoLogin(emailValue) {
+      const d = loadData();
+      const u = d.users.find(x => x.email.toLowerCase() === emailValue.toLowerCase());
+      if (u) {
+        email.value = u.email;
+        password.value = u.password || 'pass';
+        roleSelect.value = u.role;
+        
+        // Auto-login
+        const ok = demoLogin(u.email, u.password || 'pass', u.role);
+        if (ok) {
+          const route = roleRoutes[u.role] || 'dev.html';
+          location.href = route;
+        }
+        return true;
+      }
+      return false;
+    }
+
+    window.fillDemoLogin = fillDemoLogin;
+
+    // Toggle Demo Users
+    document.getElementById('demoToggleBtn').addEventListener('click', function() {
+      const demoUsers = document.getElementById('demoUsers');
+      const toggleIcon = document.getElementById('demoToggleIcon');
+      const toggleText = document.getElementById('demoToggleText');
+      
+      if (demoUsers.style.display === 'none') {
+        demoUsers.style.display = 'block';
+        toggleIcon.className = 'fas fa-chevron-up ms-2';
+        toggleText.textContent = 'Hide Demo Accounts';
+        
+        // Animate categories
+        const categories = demoUsers.querySelectorAll('.demo-category');
+        categories.forEach((category, index) => {
+          category.style.opacity = '0';
+          category.style.transform = 'translateY(20px)';
+          category.style.transition = 'all 0.5s ease-out';
+          
+          setTimeout(() => {
+            category.style.opacity = '1';
+            category.style.transform = 'translateY(0)';
+          }, index * 100);
+        });
+      } else {
+        const categories = demoUsers.querySelectorAll('.demo-category');
+        categories.forEach((category, index) => {
+          category.style.opacity = '0';
+          category.style.transform = 'translateY(-20px)';
+        });
+        
+        setTimeout(() => {
+          demoUsers.style.display = 'none';
+          toggleIcon.className = 'fas fa-chevron-down ms-2';
+          toggleText.textContent = 'Show Demo Accounts';
+        }, 300);
+      }
+    });
+
+    // Toggle Demo Category
+    function toggleDemoCategory(categoryName) {
+      const category = document.querySelector(`[data-category="${categoryName}"]`);
+      const content = category.querySelector('.demo-category-content');
+      const toggle = category.querySelector('.demo-category-toggle');
+      
+      if (category.classList.contains('expanded')) {
+        category.classList.remove('expanded');
+        content.style.maxHeight = '0';
+        content.style.padding = '0 var(--space-lg)';
+        toggle.style.transform = 'rotate(0deg)';
+      } else {
+        category.classList.add('expanded');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.style.padding = 'var(--space-lg)';
+        toggle.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    window.toggleDemoCategory = toggleDemoCategory;
+
+    // Page Load Animation
+    window.addEventListener('load', function() {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.5s ease-in';
+      
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+  </script>
+</body>
+</html>

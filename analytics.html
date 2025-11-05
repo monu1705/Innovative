@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Analytics Dashboard - ProManage</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-project-diagram me-2"></i>ProManage
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <span class="text-muted">
+          <i class="fas fa-chart-line me-1"></i>Analytics Dashboard
+        </span>
+        <button class="theme-toggle-sm btn btn-outline-secondary btn-sm" id="themeToggle" title="Toggle Theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <button id="backBtn" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-arrow-left me-1"></i>Back
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card bg-gradient text-white">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <h2 class="mb-2">Analytics Dashboard</h2>
+                <p class="mb-0 opacity-75">Comprehensive insights into project performance and team productivity</p>
+              </div>
+              <div class="col-md-4 text-end">
+                <i class="fas fa-chart-pie fa-3x opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-number" id="totalProjects">0</div>
+            <div class="stat-label">
+              <i class="fas fa-project-diagram me-1"></i>Total Projects
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-primary);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="totalTasks">0</div>
+            <div class="stat-label">
+              <i class="fas fa-tasks me-1"></i>Total Tasks
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-success);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="completedTasks">0</div>
+            <div class="stat-label">
+              <i class="fas fa-check-circle me-1"></i>Completed Tasks
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card stat-card" style="background: var(--gradient-warm);">
+          <div class="card-body text-center">
+            <div class="stat-number" id="completionRate">0%</div>
+            <div class="stat-label">
+              <i class="fas fa-percentage me-1"></i>Completion Rate
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-pie me-2"></i>Task Status Distribution
+            </h5>
+          </div>
+          <div class="card-body">
+            <canvas id="statusChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-bar me-2"></i>Projects by Status
+            </h5>
+          </div>
+          <div class="card-body">
+            <canvas id="projectStatusChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- More Charts Row -->
+    <div class="row mb-4">
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-line me-2"></i>Tasks Over Time
+            </h5>
+          </div>
+          <div class="card-body">
+            <canvas id="timelineChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-users me-2"></i>Team Productivity by Role
+            </h5>
+          </div>
+          <div class="card-body">
+            <canvas id="teamProductivityChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Performers -->
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-trophy me-2"></i>Top Performers
+            </h5>
+          </div>
+          <div class="card-body">
+            <div id="topPerformers" class="list-group list-group-flush">
+              <!-- Top performers will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-project-diagram me-2"></i>Most Active Projects
+            </h5>
+          </div>
+          <div class="card-body">
+            <div id="topProjects" class="list-group list-group-flush">
+              <!-- Top projects will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const THEME_KEY = 'promanage_theme';
+    
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.className = 'fas fa-sun';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem(THEME_KEY, newTheme);
+    });
+
+    function loadAnalytics() {
+      const projects = getAllProjects();
+      const tasks = getAllTasks();
+      const teamMembers = getAllTeamMembers();
+      const bugs = getAllBugs();
+
+      // Update key metrics
+      document.getElementById('totalProjects').textContent = projects.length;
+      document.getElementById('totalTasks').textContent = tasks.length;
+      
+      const completedTasks = tasks.filter(t => t.status === 'completed').length;
+      document.getElementById('completedTasks').textContent = completedTasks;
+      
+      const completionRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
+      document.getElementById('completionRate').textContent = completionRate + '%';
+
+      // Create charts
+      createStatusChart(tasks);
+      createProjectStatusChart(projects);
+      createTimelineChart(tasks);
+      createTeamProductivityChart(teamMembers, tasks);
+      
+      // Load top performers
+      loadTopPerformers(teamMembers, tasks);
+      loadTopProjects(projects, tasks);
+    }
+
+    // Task status distribution chart
+    function createStatusChart(tasks) {
+      const statusCounts = {
+        'todo': tasks.filter(t => t.status === 'todo').length,
+        'in_progress': tasks.filter(t => t.status === 'in_progress').length,
+        'testing': tasks.filter(t => t.status === 'testing').length,
+        'completed': tasks.filter(t => t.status === 'completed').length
+      };
+
+      const ctx = document.getElementById('statusChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Todo', 'In Progress', 'Testing', 'Completed'],
+          datasets: [{
+            data: [statusCounts.todo, statusCounts.in_progress, statusCounts.testing, statusCounts.completed],
+            backgroundColor: [
+              '#6c757d',
+              '#0d6efd',
+              '#ffc107',
+              '#198754'
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    // Project status chart
+    function createProjectStatusChart(projects) {
+      const statusCounts = {
+        'active': projects.filter(p => p.status === 'active').length,
+        'completed': projects.filter(p => p.status === 'completed').length,
+        'planning': projects.filter(p => p.status === 'planning').length,
+        'on_hold': projects.filter(p => p.status === 'on_hold').length
+      };
+
+      const ctx = document.getElementById('projectStatusChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Active', 'Completed', 'Planning', 'On Hold'],
+          datasets: [{
+            label: 'Projects',
+            data: [statusCounts.active, statusCounts.completed, statusCounts.planning, statusCounts.on_hold],
+            backgroundColor: '#6366f1',
+            borderColor: '#4f46e5',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    // Timeline chart
+    function createTimelineChart(tasks) {
+      const monthlyData = {};
+      tasks.forEach(task => {
+        const month = task.created_date.substring(0, 7); // YYYY-MM
+        monthlyData[month] = (monthlyData[month] || 0) + 1;
+      });
+
+      const sortedMonths = Object.keys(monthlyData).sort();
+      const counts = sortedMonths.map(month => monthlyData[month]);
+
+      const ctx = document.getElementById('timelineChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: sortedMonths,
+          datasets: [{
+            label: 'Tasks Created',
+            data: counts,
+            borderColor: '#06b6d4',
+            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Team productivity chart
+    function createTeamProductivityChart(teamMembers, tasks) {
+      const roleProductivity = {};
+      teamMembers.forEach(member => {
+        const memberTasks = tasks.filter(t => t.assigned_to === member.id);
+        const completed = memberTasks.filter(t => t.status === 'completed').length;
+        if (!roleProductivity[member.role]) {
+          roleProductivity[member.role] = { total: 0, completed: 0 };
+        }
+        roleProductivity[member.role].total += memberTasks.length;
+        roleProductivity[member.role].completed += completed;
+      });
+
+      const roles = Object.keys(roleProductivity);
+      const completionRates = roles.map(role => {
+        const data = roleProductivity[role];
+        return data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0;
+      });
+
+      const ctx = document.getElementById('teamProductivityChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: roles.map(r => r.replace('_', ' ')),
+          datasets: [{
+            label: 'Completion Rate (%)',
+            data: completionRates,
+            backgroundColor: [
+              '#6366f1',
+              '#06b6d4',
+              '#10b981',
+              '#f59e0b',
+              '#ef4444'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    // Load top performers
+    function loadTopPerformers(teamMembers, tasks) {
+      const memberStats = teamMembers.map(member => {
+        const memberTasks = tasks.filter(t => t.assigned_to === member.id);
+        const completed = memberTasks.filter(t => t.status === 'completed').length;
+        return { member, tasks: memberTasks.length, completed };
+      });
+
+      const topPerformers = memberStats
+        .sort((a, b) => b.completed - a.completed)
+        .slice(0, 5);
+
+      const container = document.getElementById('topPerformers');
+      container.innerHTML = topPerformers.map(({ member, tasks, completed }, index) => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="avatar-circle me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+              ${member.name.charAt(0)}
+            </div>
+            <div>
+              <h6 class="mb-1">${member.name}</h6>
+              <small class="text-muted">${member.role.replace('_', ' ')}</small>
+            </div>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-success">${completed}/${tasks}</span>
+            <div class="text-muted small">#${index + 1}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Load top projects
+    function loadTopProjects(projects, tasks) {
+      const projectStats = projects.map(project => {
+        const projectTasks = tasks.filter(t => t.project_id === project.id);
+        const completed = projectTasks.filter(t => t.status === 'completed').length;
+        return { project, tasks: projectTasks.length, completed };
+      });
+
+      const topProjects = projectStats
+        .sort((a, b) => b.completed - a.completed)
+        .slice(0, 5);
+
+      const container = document.getElementById('topProjects');
+      container.innerHTML = topProjects.map(({ project, tasks, completed }, index) => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1">${project.name}</h6>
+            <small class="text-muted">${project.status}</small>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-primary">${completed}/${tasks}</span>
+            <div class="text-muted small">#${index + 1}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        location.href = 'login.html';
+        return;
+      }
+      const roleRoutes = {
+        'admin': 'admin.html',
+        'project_manager': 'pm.html',
+        'developer': 'dev.html',
+        'programmer': 'dev.html',
+        'tester': 'tester.html'
+      };
+      location.href = roleRoutes[currentUser.role] || 'login.html';
+    });
+
+    // Load analytics on page load
+    loadAnalytics();
+  </script>
+</body>
+</html>
